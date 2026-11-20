@@ -1,6 +1,6 @@
 # Slice 0 — Price data: findings
 
-Date: 21 November 2026 (research by web lookup; the fetch script has not yet been
+Date: 20 November 2026 (research by web lookup; the fetch script has not yet been
 run against a live feed — see "Still to do").
 
 ## Recommendation
