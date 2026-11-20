@@ -25,23 +25,28 @@ copied on emails but do not play.
 - Never give buy or sell advice anywhere in the product.
 - Store as little personal data as possible (section 9).
 
-## 3. Stack (recommended; confirm against current docs before committing)
+## 3. Stack (checked in Slice 0; see docs/slice-0-price-data.md)
 
-- Hosting: Cloudflare (Pages/Workers), auto-deploying from GitHub, matching the
-  owner's existing setup.
+- Hosting: one Cloudflare Worker with static assets (not Pages), auto-deploying
+  from GitHub. The same Worker serves the site, the API and the scheduled jobs.
 - Database: Cloudflare D1 (SQLite).
 - Scheduled jobs: Cloudflare Cron Triggers (daily price fetch, Saturday email).
+  Cron runs in UTC; Sydney-time schedules must handle daylight saving.
 - Front end: one lightweight framework of your choice; TypeScript throughout.
 - Email: a transactional email service with a simple API.
 - Weekly explainers: Claude API, with web search for that week's news.
-- Price data: chosen in Slice 0.
+- Price data: EODHD (daily closes, dividends, FX). Free key for testing; the
+  "EOD Historical Data — All World" personal plan from Slice 2. Yahoo Finance's
+  unofficial endpoints are a fallback and cross-check only.
 
 If any of these is a poor fit when checked, propose an alternative and wait for
 approval before changing.
 
 ## 4. Company universe
 
-23 companies. Tickers below are from memory: verify every one in Slice 0.
+23 companies. TTWO, SPCX and FWONK were confirmed by lookup in Slice 0. The rest
+are confirmed when `scripts/fetch-week.mjs` first runs against the live feed;
+record the working EODHD codes here afterwards.
 
 | World | Company | Ticker (verify) | Exchange | Currency |
 | --- | --- | --- | --- | --- |
@@ -154,8 +159,9 @@ The events calendar is curated by the admin (game launches, films, results days)
 
 ## 8. The Saturday email
 
-- Sent Saturday 7:00 am Australia/Sydney, after the US Friday close. Schedule must
-  handle daylight saving.
+- Sent Saturday 11:00 am Australia/Sydney. The US Friday close is as late as
+  8:00 am Saturday Sydney time in the Australian summer, and the data provider
+  needs time to publish. Schedule must handle daylight saving.
 - One email per player, copied to the parent. A copy is also readable in the game.
 - Five parts, always in this order:
   1. The score: player versus the index, this week and over the current stretch.
